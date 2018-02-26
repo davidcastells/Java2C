@@ -28,4 +28,6 @@ public abstract interface BidirectionalChannel
 {
     public abstract void send(byte[] data) throws IOException;
     public abstract void receive(byte[] data) throws IOException;
+
+    public abstract void initOtherEndpoint() throws IOException;
 }
