@@ -18,6 +18,7 @@ package cat.uab.cephis;
 
 import cat.uab.cephis.channel.BidirectionalChannel;
 import cat.uab.cephis.channel.JNIChannel;
+import cat.uab.cephis.channel.NamedPipesChannel;
 import cat.uab.cephis.channel.SocketChannel;
 import cat.uab.cephis.util.PerformanceLap;
 import java.io.IOException;
@@ -59,6 +60,11 @@ public class Java2CBenchmark {
         
         System.out.println("JNI Channel");
         testChannel(channel);
+        
+        channel = new NamedPipesChannel();
+        
+        System.out.println("POSIX FIFO Channel");
+        testChannel(channel);
     }
     
     private void testChannel(BidirectionalChannel channel) throws IOException 
@@ -66,6 +72,13 @@ public class Java2CBenchmark {
         int fromSize = 1;
         int toSize = 0x100000;   // 64KB
         
+        if (!channel.isSupportedInPlatform())
+        {
+            System.out.println("[WARNING] Channel not supported in this plaform, skipping...");
+            return;
+        }
+        
+        channel.initOtherEndpoint();
         
         PerformanceLap txLap = new PerformanceLap();
         PerformanceLap rxLap = new PerformanceLap();
@@ -112,23 +125,24 @@ public class Java2CBenchmark {
             if (data[i] != (byte)((i+1) & 0xFF) )
             {
                 System.err.println("ERROR");
-                dumpArray(System.err, data);
+                dumpArray(System.err, data, 0x20);
                 System.exit(0);
                 //throw new RuntimeException("Processing error in pos " + i + " expected: " + (((i+1) & 0xFF)) + " found " + data[i] );
             }
         }
     }
 
-    private void dumpArray(PrintStream out, byte[] data) 
+    private void dumpArray(PrintStream out, byte[] data, int len) 
     {
         out.println("ARRAY:");
-        for (int i=0; i < data.length; i++)
+        for (int i=0; i < Math.min(data.length, len); i++)
         {
             out.print(String.format("%02X ", data[i]));
             if (i>0 && (i%16 == 0))
-                System.out.println("");
+                out.println("");
         }
         
+        out.println("");
         out.flush();
        
     }
