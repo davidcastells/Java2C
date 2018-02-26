@@ -32,21 +32,37 @@ int main(int argc, char *argv[])
     int listenfd = 0, connfd = 0;
     struct sockaddr_in serv_addr; 
 
+    int ret;
     
     time_t ticks; 
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
     memset(&serv_addr, '0', sizeof(serv_addr));
     
-
+    int port = 9017;
+    
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serv_addr.sin_port = htons(9017); 
+    serv_addr.sin_port = htons(port); 
 
-    bind(listenfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)); 
+    ret = bind(listenfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr)); 
 
-    listen(listenfd, 10); 
+    if (ret == -1)
+    {
+        printf("[ERROR] bind failed with error %d\n", errno);
+        exit(-1);
+    }
+    
+    ret = listen(listenfd, 10); 
 
+    if (ret == -1)
+    {
+        printf("[ERROR] listen failed with error %d\n", errno);
+        exit(-1);
+    }
+    
+    printf("[INFO] listening on port %d\n", port);
+    
     while(1)
     {
         connfd = accept(listenfd, (struct sockaddr*)NULL, NULL); 
@@ -57,7 +73,7 @@ int main(int argc, char *argv[])
         
         int nRead = read(connfd, &v, 4);
         
-//        printf("Data Read=%08X (%d bytes)\n", v, nRead);
+        printf("Data Read=%08X\n", v);
         
         unsigned char* buff = new unsigned char[v];
         nRead = 0;
@@ -65,7 +81,7 @@ int main(int argc, char *argv[])
         
         do
         {
-            nRead += (ret = read(connfd, buff, v-nRead));
+            nRead += (ret = read(connfd, &buff[nRead], v-nRead));
         } while (nRead < v && (ret != 0) && (ret != -1));
         
         if (nRead < v)
