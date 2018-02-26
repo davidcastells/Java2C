@@ -16,6 +16,8 @@
  */
 package cat.uab.cephis.channel;
 
+import cat.uab.cephis.util.OsInfo;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -26,8 +28,12 @@ public class JNIChannel implements BidirectionalChannel
 {
     static
     {
-        // @todo hardcoded path
-        System.load("/home/dcr/Java2CBenchmark/C++/JNIChannel/JNIChannel.so");
+        File currentDir = new File(System.getProperty("user.dir"));
+        
+        if (OsInfo.isLinux())
+            System.load(new File(currentDir.getParentFile(), "/C++/JNIChannel/JNIChannel.so").getAbsolutePath());
+        else
+            System.load(new File(currentDir.getParentFile(), "/C++/JNIChannel/JNIChannel.DLL").getAbsolutePath());
     }
 
     @Override
@@ -44,5 +50,17 @@ public class JNIChannel implements BidirectionalChannel
 
     private native void nativeSend(byte[] data);
     private native void nativeReceive(byte[] data);
+
+    @Override
+    public void initOtherEndpoint() throws IOException
+    {
+        // JNI does not need to do anythin to initialize the other endpoint
+    }
+
+    @Override
+    public boolean isSupportedInPlatform()
+    {
+        return true;
+    }
     
 }
