@@ -16,6 +16,7 @@
  */
 package cat.uab.cephis.channel;
 
+import cat.uab.cephis.util.OsInfo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -111,5 +112,21 @@ public class SocketChannel implements BidirectionalChannel
         }
 
         os.write(buf);
+    }
+
+    @Override
+    public void initOtherEndpoint() throws IOException
+    {
+        // @todo check it it is running first
+        
+        // Init the server , is it is not running
+        if (OsInfo.isWindows())
+            Runtime.getRuntime().exec("../C++/SocketChannel/dist/Debug/Cygwin-Windows/socketchannel.exe");
+    }
+
+    @Override
+    public boolean isSupportedInPlatform()
+    {
+        return true;
     }
 }
