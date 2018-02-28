@@ -18,7 +18,7 @@ package cat.uab.cephis;
 
 import cat.uab.cephis.channel.BidirectionalChannel;
 import cat.uab.cephis.channel.JNIChannel;
-import cat.uab.cephis.channel.NamedPipesChannel;
+import cat.uab.cephis.channel.WindowsNamedPipeChannel;
 import cat.uab.cephis.channel.SocketChannel;
 import cat.uab.cephis.util.PerformanceLap;
 import java.io.IOException;
@@ -61,12 +61,18 @@ public class Java2CBenchmark {
         System.out.println("JNI Channel");
         testChannel(channel);
         
-        channel = new NamedPipesChannel();
+        channel = new WindowsNamedPipeChannel();
         
-        System.out.println("POSIX FIFO Channel");
+        System.out.println("Named PIPE Channel");
         testChannel(channel);
     }
     
+    
+    /**
+     * Test the channel
+     * @param channel
+     * @throws IOException 
+     */
     private void testChannel(BidirectionalChannel channel) throws IOException 
     {
         int fromSize = 1;
@@ -84,6 +90,16 @@ public class Java2CBenchmark {
         PerformanceLap rxLap = new PerformanceLap();
         PerformanceLap totalLap = new PerformanceLap();
         
+        
+        //warm up, do some transfers to warm up the system
+        for (int i=fromSize; i <= toSize; i *= 2)
+        {
+            byte[] data = createArray(i);
+            channel.send(data);
+            channel.receive(data);
+        }
+        
+        // Real measure
         System.out.println("DataSize;TX_Time;RX_Time;RT_Time;");
         System.out.flush();
         
