@@ -18,6 +18,7 @@ package cat.uab.cephis;
 
 import cat.uab.cephis.channel.BidirectionalChannel;
 import cat.uab.cephis.channel.JNIChannel;
+import cat.uab.cephis.channel.PosixNamedPipeChannel;
 import cat.uab.cephis.channel.WindowsNamedPipeChannel;
 import cat.uab.cephis.channel.SocketChannel;
 import cat.uab.cephis.util.PerformanceLap;
@@ -63,7 +64,12 @@ public class Java2CBenchmark {
         
         channel = new WindowsNamedPipeChannel();
         
-        System.out.println("Named PIPE Channel");
+        System.out.println("Windows Named PIPE Channel");
+        testChannel(channel);
+        
+        channel = new PosixNamedPipeChannel();
+        
+        System.out.println("Posix Named PIPE Channel");
         testChannel(channel);
     }
     
