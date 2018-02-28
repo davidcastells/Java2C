@@ -10,6 +10,9 @@
  *
  * Created on February 9, 2018, 12:55 PM
  */
+#ifdef _WIN32
+    #include <windows.h>
+#endif
 
 #include "cat_uab_cephis_channel_JNIChannel.h"
 
