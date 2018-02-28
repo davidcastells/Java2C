@@ -25,6 +25,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -73,10 +75,22 @@ public class WindowsNamedPipeChannel implements BidirectionalChannel
     @Override
     public void initOtherEndpoint() throws IOException
     {
+        // First create the server
+        File file = new File("../C++/NamedPipesChannel/dist/Debug/Cygwin-Windows/namedpipeschannel.exe");
+        if (!file.exists())
+            throw new RuntimeException("No executable");
+
+        Runtime.getRuntime().exec(file.getAbsolutePath());
+        try
+        {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(WindowsNamedPipeChannel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        // then connect the pipes
         createPipes();
-        
-//        if (OsInfo.isWindows())
-//            Runtime.getRuntime().exec("../C++/NamedPipesChannel/dist/Debug/Cygwin-Windows/namedpipeschannel.exe");
     }
 
     @Override
