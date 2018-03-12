@@ -122,6 +122,11 @@ public class SocketChannel implements BidirectionalChannel
         // Init the server , is it is not running
         if (OsInfo.isWindows())
             Runtime.getRuntime().exec("../C++/SocketChannel/dist/Debug/Cygwin-Windows/socketchannel.exe");
+        else if (OsInfo.isLinux())
+            Runtime.getRuntime().exec("../C++/SocketChannel/dist/Debug/GNU-Linux/socketchannel");
+        else 
+            throw new IOException("Unsupported platform " + OsInfo.getOsName());
+            
     }
 
     @Override
