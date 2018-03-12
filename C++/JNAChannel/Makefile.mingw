@@ -1,0 +1,35 @@
+JAVAPROJECT=../../java
+#JDK=/usr/java/jdk1.8.0_151
+JDK=/usr/java/jdk1.8.0_45
+#JDK_OS=linux
+JDK_OS=win32
+MINGW=/usr/x86_64-w64-mingw/bin
+
+CC=/usr/bin/x86_64-w64-mingw32-gcc
+CPP=/usr/bin/x86_64-w64-mingw32-g++
+CXX=/usr/bin/x86_64-w64-mingw32-g++
+LD=/usr/bin/x86_64-w64-mingw32-g++
+
+#CC=gcc
+#CPP=g++
+#CXX=g++
+#LD=g++
+
+CFLAGS=-g -std=c++11 -I/usr/local/include -I$(JDK)/include -I$(JDK)/include/$(JDK_OS) -I/usr/lib/gcc/i686-w64-mingw32/5.4.0/include/ -m64 -O3
+CPPFLAGS=-g -std=c++11  -I/usr/local/include -I$(JDK)/include -I$(JDK)/include/$(JDK_OS) -I/usr/lib/gcc/i686-w64-mingw32/5.4.0/include/ -m64 -O3
+LDFLAGS=-fno-stack-protector -shared -static -fPIC -Wl,--no-as-needed -lstdc++
+
+all: JNAChannel.DLL
+	
+JNAChannel.DLL: JNAChannel.cpp
+	$(CPP) $(CPPFLAGS) $(LDFLAGS) JNAChannel.cpp -o JNAChannel.DLL
+
+
+clean:
+	rm -fr *.so
+	rm -fr *.DLL
+	
+	
+#install:
+#	cp $(TARGET) /usr/local/lib/
+
