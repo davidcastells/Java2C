@@ -37,9 +37,9 @@
           <executablePath></executablePath>
           <ccTool>
             <incDir>
-              <pElem>/usr/local/include</pElem>
-              <pElem>/usr/java/jdk1.8.0_151/include</pElem>
-              <pElem>/usr/java/jdk1.8.0_151/include/linux</pElem>
+              <pElem>usr/local/include</pElem>
+              <pElem>usr/java/jdk1.8.0_151/include</pElem>
+              <pElem>usr/java/jdk1.8.0_151/include/linux</pElem>
             </incDir>
           </ccTool>
         </makeTool>
