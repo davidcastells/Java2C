@@ -76,7 +76,7 @@ public class WindowsNamedPipeChannel implements BidirectionalChannel
     public void initOtherEndpoint() throws IOException
     {
         // First create the server
-        File file = new File("../C++/NamedPipesChannel/dist/Debug/Cygwin-Windows/namedpipeschannel.exe");
+        File file = new File("../C++/WindowsNamedPipesChannel/dist/Debug/Cygwin-Windows/namedpipeschannel.exe");
         if (!file.exists())
             throw new RuntimeException("No executable");
 
