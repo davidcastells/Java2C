@@ -17,6 +17,7 @@
 package cat.uab.cephis;
 
 import cat.uab.cephis.channel.BidirectionalChannel;
+import cat.uab.cephis.channel.JNAChannel;
 import cat.uab.cephis.channel.JNIChannel;
 import cat.uab.cephis.channel.WindowsNamedPipeChannel;
 import cat.uab.cephis.channel.SocketChannel;
@@ -51,19 +52,20 @@ public class Java2CBenchmark {
     {
         BidirectionalChannel channel;
         
-        channel = new SocketChannel(9017);
-
         System.out.println("Socket Channel");
+        channel = new SocketChannel(9017);
         testChannel(channel);
-        
-        channel = new JNIChannel();
         
         System.out.println("JNI Channel");
+        channel = new JNIChannel();
+        testChannel(channel);
+
+        System.out.println("JNA Channel");
+        channel = new JNAChannel();        
         testChannel(channel);
         
-        channel = new WindowsNamedPipeChannel();
-        
         System.out.println("Named PIPE Channel");
+        channel = new WindowsNamedPipeChannel();
         testChannel(channel);
     }
     
